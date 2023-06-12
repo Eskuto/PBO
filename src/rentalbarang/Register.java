@@ -200,7 +200,7 @@ public class Register extends javax.swing.JFrame {
                 p.close();
                 JOptionPane.showMessageDialog(null, "Create Account Successfully");
             }catch(SQLException e){
-                System.out.println("Error");
+                System.out.println(e);
             }finally{
                 this.dispose();
                 Login a = new Login();

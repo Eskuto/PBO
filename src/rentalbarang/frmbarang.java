@@ -407,7 +407,7 @@ public class frmbarang extends javax.swing.JFrame {
                 p.setDate(5, tgl_pinjam);
                 p.setDate(6, tgl_kembali);
                 p.setString(7, lm_pinjam);
-                p.setString(8, NPM);
+                p.setString(8, this.NPM);
                 p.executeUpdate();
                 p.close();
                 JOptionPane.showMessageDialog(null, "Create Pinjam Successfully");
@@ -418,6 +418,7 @@ public class frmbarang extends javax.swing.JFrame {
             finally{
                 this.dispose();
                 frmbarang a = new frmbarang();
+                a.kirim(this.NPM);
                 a.setVisible(true);
             }
         }
