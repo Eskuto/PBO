@@ -27,12 +27,11 @@ import javax.swing.table.DefaultTableModel; //Digunakan untuk menampilkan dan me
  * @author Kelompok 8
  */
 public class frmbarang extends javax.swing.JFrame {
+    //Inisiasi variable dan Class
     String NPM;
     public Connection con;
     public Statement st;
     public ResultSet rs;
-    public Statement mt;
-    public ResultSet ks;
     public DefaultTableModel model;
     /**
      * Creates new form frmbarang
@@ -72,62 +71,64 @@ public class frmbarang extends javax.swing.JFrame {
             rs = st.executeQuery("SELECT id_Rental FROM tb_rental"); //Menampilkan nilai dari id_rental dati tabel tb_rental.
             
             while(rs.next()){ //Mengakses seluruh baris dari kolom id_rental.
-                String id_ren = rs.getString(1);
-                System.out.println(id_ren);
-                if(!id_ren.equals(Id_ren)){
+                String id_ren = rs.getString(1); //Mendapatkan Id Rental
+                if(!id_ren.equals(Id_ren)){ //Periksa apakah id rental yang di inputkan sudah ada ?
                 }
-                else{
-                    i ++;
-                    Id_ren = (slnpm + i);
+                else //Jika sudah ada maka tambbah i dengan 1
+                { 
+                    i ++; 
+                    Id_ren = (slnpm + i); 
                 }
             }
-            idrental.setText(Id_ren);
+            idrental.setText(Id_ren); //Mendapatkan Id_rental Baru
         }catch(Exception e){
-            System.out.println("e");
+            System.out.println("e"); //Menerima error saat SQL gagap di olah.
         }
     }
       
     public void tanggalpinjam(){
+      //fungsi untuk mendapatkan tanggal terkini
         Date tgl =new Date();
-        SimpleDateFormat dt = new SimpleDateFormat("dd-MM-yyyy");
-        tglpinjam.setText(dt.format(tgl));
+        SimpleDateFormat dt = new SimpleDateFormat("dd-MM-yyyy"); //Format penanggalan
+        tglpinjam.setText(dt.format(tgl));//Menampilkan teks tanggal
     } 
     
     public void jumlahchar(KeyEvent a){
+      //fungsi agar ID Rental tidak lebih dari 4
         if(idrental.getText().length()==4){
             a.consume();
-            JOptionPane.showMessageDialog(null, "Masukan 4 Karakter",
+            JOptionPane.showMessageDialog(null, "Masukan 4 Karakter",//JOption memberikan dialog Peringatan bila lebih dari 4
                     "Peringatan",JOptionPane.WARNING_MESSAGE);
         }
     }
     
-    public void kirim(String NPM){  
+    public void kirim(String NPM){ 
+      //Mendapatkan nilai NPM dari kelas Login
          this.NPM = NPM;
-         tanggalpinjam();
+         tanggalpinjam(); 
          autonumber();
          tampil();
     }
     
     public void tampil(){
-                 hitungtelat();
-        koneksi classKoneksi = new koneksi();
+      //Fungsi untuk menampilkan tabel
+        hitungtelat();
+        koneksi classKoneksi = new koneksi();//Mengkoneksikan dengan SQL
         try{
             con = classKoneksi.getkoneksi();
-            st = con.createStatement();
-            rs = st.executeQuery("SELECT * FROM tb_rental WHERE NPM='" + this.NPM + "'");
-            System.out.println(this.NPM);
+            st = con.createStatement(); //Menyiapkan preparedStatement
+            rs = st.executeQuery("SELECT * FROM tb_rental WHERE NPM='" + this.NPM + "'"); //Mengeksekusi syntaks SQL
             
             int no = 1;
-            while(rs.next()){
+            while(rs.next()){ //Mengaskses seluruh baris di database dimana NPM nilainya sama dengan yang di Inputkan
+              //Mendapatkan semua nilai Coloumn
                 String[] row = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), 
                                 rs.getString(6), rs.getString(7),rs.getString(8),rs.getString(9),rs.getString(10)};
-                model.addRow(row);
+                model.addRow(row);//Membentuk tabel
                 no++;
             }
-//            tabelStatus.setModel(model);
         }catch(SQLException ex){
-            System.out.print(ex.getMessage());
-            System.out.println("ada");
+            System.out.print(ex.getMessage());//Menerima error bila SQL gagal diolah.
         }
     }
     
@@ -413,7 +414,9 @@ public class frmbarang extends javax.swing.JFrame {
 
     private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
         // TODO add your handling code here:
-        Connection c = koneksi.getkoneksi();
+        Connection c = koneksi.getkoneksi(); //Mengkoneksikan dengan SQL
+      
+        //Mendapatkan semua Input user lalu di convert menjadi nilai string.
         String id_rental = idrental.getText().toString().trim();
         String varName = (String)cmb_barang.getSelectedItem();
         String barang = cmb_barang.getSelectedItem().toString().trim();
@@ -421,24 +424,26 @@ public class frmbarang extends javax.swing.JFrame {
         String merk = merkbarang.getText().toString().trim();
         String kembali = "Belum";
         
+        //Mendapatkan nilai tanggal
         Date tgl =new Date();
         Date tgl_kmbl = tglkembali.getDate();
         String lm_pinjam = lmpinjam.getText().toString().trim();
         
+        //convert date menjadi time
         java.sql.Date tgl_pinjam = new java.sql.Date(tgl.getTime());
         java.sql.Date tgl_kembali = new java.sql.Date(tgl_kmbl.getTime());
         
+        //memeriksa apakah ada nilai yang kosong.
         if (id_rental.equals("") || barang.equals("") || jumlah.equals("") || merk.equals("") ||
                 tgl_pinjam.equals("") ||  tgl_kembali.equals("") ||  lm_pinjam.equals("")){
-            JOptionPane.showMessageDialog(null, "Username or Password cannot be empty");
+            JOptionPane.showMessageDialog(null, "Form tdk boleh ada yang kosong");//Bila kosong Joption menampilkan dialog
         }else{
             try{
-                PreparedStatement st = c.prepareStatement("SELECT NPM FROM tb_peminjam");
+                PreparedStatement st = c.prepareStatement("SELECT NPM FROM tb_peminjam");//Menyiapkan SQL untuk mengakses database
                 ResultSet rs = st.executeQuery();
-                rs.next();
-                String NPM = rs.getString(1);
+                rs.next();//akses database berdasarkan NPM
                 
-                String sql = "INSERT INTO tb_rental VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO tb_rental VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //Memasukan value dari variable yg telah dibuat kedalam SQL
                 PreparedStatement p = c.prepareStatement(sql);
                 p.setString(1, id_rental);
                 p.setString(2, barang);
@@ -469,43 +474,44 @@ public class frmbarang extends javax.swing.JFrame {
     }//GEN-LAST:event_submitActionPerformed
     
     public String hitungselisih(){
-            Date tgl2 =new Date();
-            Date date1 = tglkembali.getDate();
-            long selisihMilidetik = date1.getTime() - tgl2.getTime();
-            long selisihHari = (selisihMilidetik / (24 * 60 * 60 * 1000)) + 1;
-            String selisih = Long.toString(selisihHari);
+            Date tgl2 =new Date();// mendapatkan tanggal saat ini
+            Date date1 = tglkembali.getDate(); //mendapatkan tanggal kembali
+            long selisihMilidetik = date1.getTime() - tgl2.getTime(); //mengconvert tanggal menjadi milidetik
+            long selisihHari = (selisihMilidetik / (24 * 60 * 60 * 1000)) + 1;//convert  milidetik menjadi hari
+            String selisih = Long.toString(selisihHari);//mengubah tipe long menjadi String
         return selisih;   
     }
     
     public void hitungtelat(){
+      //Fungsi untuk menghitung telat
         Date tgl2 =new Date();
-        String telats = "";
+        String telats = "";//Inisiasi Nilai telat
         
             try{            
-                Connection c = koneksi.getkoneksi();
+                Connection c = koneksi.getkoneksi();//mendapatkan koneksi SQL
                 st = c.createStatement();
-                rs = st.executeQuery("SELECT tgl_kembali, kembali FROM tb_rental WHERE NPM='" + this.NPM + "'");
+                rs = st.executeQuery("SELECT tgl_kembali, kembali FROM tb_rental WHERE NPM='" + this.NPM + "'");//mendapatkan tanggal kembali berdasarkan NPM
 
                 int i =1;
-                while(rs.next()){
-                    String slnpm = this.NPM.substring(8, 11);
-                    String kembali = rs.getString(2);
-                    System.out.println(kembali);
-                    if (kembali.equals("Belum")){
+                while(rs.next()){//Mengakses database
+                    String slnpm = this.NPM.substring(8, 11); //mendapatkan id rental
+                    String kembali = rs.getString(2);//mendapatkan status kembali
+                  
+                    if (kembali.equals("Belum")){//Bila status Belum maka mulai hitung apakah telat?
                         String Id_ren = (slnpm + i);
                         Date date1 = rs.getDate(1);
                         long selisihMilidetik = tgl2.getTime()- date1.getTime();
-                        long selisihHari = (0 -selisihMilidetik / (24 * 60 * 60 * 1000)+1) ;
+                        long selisihHari = (selisihMilidetik / (24 * 60 * 60 * 1000)+1) ;
                         telats = Long.toString(selisihHari);
-                        System.out.println(telats);
-                        int telat = Integer.parseInt(telats);
+                        System.out.println(telats); //mendapatkan nilai telat
 
-                        if(telat >= 0){
+
+                        if(telat >= 0){ // bila nilai telat tidak minus maka mulai menghitung denda
                             PreparedStatement tm = c.prepareStatement("UPDATE tb_rental SET telat='" + telat +"' WHERE id_rental ='" + Id_ren + "'");
-                            tm.executeUpdate();
+                            tm.executeUpdate(); //mengupdate nilai telat di SQl
                             int denda = 0 + telat*5000;
                             PreparedStatement km = c.prepareStatement("UPDATE tb_rental SET denda='" + denda +"' WHERE id_rental ='" + Id_ren + "'");
-                            km.executeUpdate();
+                            km.executeUpdate(); //mengupdate nilai denda di SQl
                             i++;
                         }
                         else{
@@ -519,7 +525,7 @@ public class frmbarang extends javax.swing.JFrame {
                 
             }
             catch(SQLException e){
-                System.out.println(e);
+                System.out.println(e); //menerima error bila SQL gagal di olah
             }   
     }
     
@@ -528,7 +534,7 @@ public class frmbarang extends javax.swing.JFrame {
     }//GEN-LAST:event_idrentalActionPerformed
 
     private void aturulangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aturulangActionPerformed
-        // TODO add your handling code here:
+        // Mereset semua isi formulir
         merkbarang.setText("");
         tglkembali.setDate(null);
         lmpinjam.setText("");
@@ -536,7 +542,7 @@ public class frmbarang extends javax.swing.JFrame {
     }//GEN-LAST:event_aturulangActionPerformed
 
     private void idrentalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_idrentalKeyTyped
-        // TODO add your handling code here:
+        // memeriksa jumlah char di ID-rental
         jumlahchar(evt);
     }//GEN-LAST:event_idrentalKeyTyped
 
@@ -587,7 +593,7 @@ public class frmbarang extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmbarang().setVisible(true);
+                new frmbarang().setVisible(true);//menampilkan frame barang
             }
         });
     }
