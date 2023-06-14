@@ -222,8 +222,8 @@ public class Register extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // Fungsi Button Login
         this.dispose(); //Menghancurkan jendela Register
-        Login a = new Login(); //Membuat jendela Login dari kelas Login
-        a.setVisible(true); //Akan M
+        Login a = new Login(); //Membuat jendela Login dari kelas Login.
+        a.setVisible(true); //Menampilkan jendela Login.
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
