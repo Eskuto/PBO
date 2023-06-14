@@ -2,14 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+
 package rentalbarang;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import javax.swing.JOptionPane;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+//Library
+import java.sql.Connection; //Mengkoneksikan java dengan SQL.
+import java.sql.ResultSet; //resultset adalah pengontrol letak kursor terhadap suatu baris didalam database.
+import java.sql.SQLException; // Untuk menangani kesalahan-kesalahan yang mungkin terjadi saat pengolahan database
+import java.sql.Statement; //Untuk mengantarkan syntax SQL yang ditulis di java ke dalam database
+import javax.swing.JOptionPane; //Untuk menyediakan jendela dialog.
+import java.awt.Dimension; //Untuk mendapatkan dimensi lebar atau tinggi suatu komponen dalam int atau double.
+import java.awt.Toolkit; //balah satu fungsinya Untuk mendapatkan ukuran jendela.
 /**
  @author Kelompok 8
  */
