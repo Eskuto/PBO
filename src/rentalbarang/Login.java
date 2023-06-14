@@ -11,7 +11,7 @@ import java.sql.SQLException; // Untuk menangani kesalahan-kesalahan yang mungki
 import java.sql.Statement; //Untuk mengantarkan syntax SQL yang ditulis di java ke dalam database
 import javax.swing.JOptionPane; //Untuk menyediakan jendela dialog.
 import java.awt.Dimension; //Untuk mendapatkan dimensi lebar atau tinggi suatu komponen dalam int atau double.
-import java.awt.Toolkit; //balah satu fungsinya Untuk mendapatkan ukuran jendela.
+import java.awt.Toolkit; //Salah satu fungsinya Untuk mendapatkan ukuran jendela.
 /**
  @author Kelompok 8
  */
