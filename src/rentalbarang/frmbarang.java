@@ -29,12 +29,15 @@ public class frmbarang extends javax.swing.JFrame {
     public Connection con;
     public Statement st;
     public ResultSet rs;
+    public Statement mt;
+    public ResultSet ks;
     public DefaultTableModel model;
     /**
      * Creates new form frmbarang
      */
     public frmbarang() {
         initComponents();
+        
         
         Dimension layar = Toolkit.getDefaultToolkit().getScreenSize();
         int x = layar.width / 2 - this.getSize().width / 2;
@@ -43,15 +46,40 @@ public class frmbarang extends javax.swing.JFrame {
         SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel( 0, 0, 10, 1);
         jml.setModel(spinnerNumberModel);
         
-        String[] header = {"Id Rental", "Barang", "Jumlah", "Merk Barang", "Tgl Pinjam", "Tgl Kembali", "Lama Pinjam"};
+        String[] header = {"Id Rental", "Barang", "Jumlah", "Merk Barang", "Tgl Pinjam", "Tgl Kembali", "Lama Pinjam","Telat", "Kembali", "Denda" };
         model = new DefaultTableModel(header,0);
         tabelStatus.setModel(model);
+         
         
         
-//        tampil();
-          
-        tanggalpinjam();
     }
+    
+    
+    private void autonumber(){
+        try{
+            Connection c = koneksi.getkoneksi();
+            st = c.createStatement();
+            System.out.println(this.NPM);
+            String slnpm = this.NPM.substring(8, 11);
+            int i =1;
+            String Id_ren = (slnpm + i);
+            rs = st.executeQuery("SELECT id_Rental FROM tb_rental");
+            while(rs.next()){
+                String id_ren = rs.getString(1);
+                System.out.println(id_ren);
+                if(!id_ren.equals(Id_ren)){
+                }
+                else{
+                    i ++;
+                    Id_ren = (slnpm + i);
+                }
+            }
+            idrental.setText(Id_ren);
+        }catch(Exception e){
+            System.out.println("e");
+        }
+    }
+      
     public void tanggalpinjam(){
         Date tgl =new Date();
         SimpleDateFormat dt = new SimpleDateFormat("dd-MM-yyyy");
@@ -68,19 +96,24 @@ public class frmbarang extends javax.swing.JFrame {
     
     public void kirim(String NPM){  
          this.NPM = NPM;
+         tanggalpinjam();
+         autonumber();
          tampil();
     }
     
     public void tampil(){
+                 hitungtelat();
         koneksi classKoneksi = new koneksi();
         try{
             con = classKoneksi.getkoneksi();
             st = con.createStatement();
             rs = st.executeQuery("SELECT * FROM tb_rental WHERE NPM='" + this.NPM + "'");
             System.out.println(this.NPM);
+            
             int no = 1;
             while(rs.next()){
-                String[] row = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7)};
+                String[] row = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), 
+                                rs.getString(6), rs.getString(7),rs.getString(8),rs.getString(9),rs.getString(10)};
                 model.addRow(row);
                 no++;
             }
@@ -166,7 +199,7 @@ public class frmbarang extends javax.swing.JFrame {
         });
 
         jLabel3.setBackground(new java.awt.Color(204, 204, 204));
-        jLabel3.setText("STATUS PEMINJAMAN");
+        jLabel3.setText("DAFTAR PEMINJAMAN");
 
         jLabel4.setText("Tanggal Pinjam");
 
@@ -222,13 +255,13 @@ public class frmbarang extends javax.swing.JFrame {
         tabelStatus.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         tabelStatus.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7"
+                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Titile 10"
             }
         ));
         tabelStatus.setGridColor(new java.awt.Color(0, 0, 0));
@@ -245,7 +278,7 @@ public class frmbarang extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 154, Short.MAX_VALUE)
+                        .addGap(0, 173, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(aturulang, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -255,35 +288,32 @@ public class frmbarang extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(36, 36, 36)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jml)
+                            .addComponent(cmb_barang, javax.swing.GroupLayout.Alignment.LEADING, 0, 154, Short.MAX_VALUE)
+                            .addComponent(idrental, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(merkbarang))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel1))
+                                .addComponent(lmpinjam, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jml)
-                                    .addComponent(cmb_barang, javax.swing.GroupLayout.Alignment.LEADING, 0, 154, Short.MAX_VALUE)
-                                    .addComponent(idrental, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(merkbarang))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(30, 30, 30)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(lmpinjam, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jLabel9)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(tglpinjam)
-                                    .addComponent(tglkembali, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tglpinjam)
+                            .addComponent(tglkembali, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(38, 38, 38))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -292,7 +322,10 @@ public class frmbarang extends javax.swing.JFrame {
                         .addComponent(jLabel3))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(312, 312, 312)
-                        .addComponent(jLabel11)))
+                        .addComponent(jLabel11))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 705, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -334,17 +367,17 @@ public class frmbarang extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jButton1)
                                 .addComponent(jLabel9)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(submit)
                     .addComponent(aturulang))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addGap(12, 12, 12)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+                .addGap(23, 23, 23))
         );
 
         setJMenuBar(jMenuBar1);
@@ -374,12 +407,12 @@ public class frmbarang extends javax.swing.JFrame {
     private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
         // TODO add your handling code here:
         Connection c = koneksi.getkoneksi();
-        
         String id_rental = idrental.getText().toString().trim();
         String varName = (String)cmb_barang.getSelectedItem();
         String barang = cmb_barang.getSelectedItem().toString().trim();
         String jumlah = jml.getValue().toString().trim();
         String merk = merkbarang.getText().toString().trim();
+        String kembali = "Belum";
         
         Date tgl =new Date();
         Date tgl_kmbl = tglkembali.getDate();
@@ -398,7 +431,7 @@ public class frmbarang extends javax.swing.JFrame {
                 rs.next();
                 String NPM = rs.getString(1);
                 
-                String sql = "INSERT INTO tb_rental VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO tb_rental VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement p = c.prepareStatement(sql);
                 p.setString(1, id_rental);
                 p.setString(2, barang);
@@ -407,7 +440,10 @@ public class frmbarang extends javax.swing.JFrame {
                 p.setDate(5, tgl_pinjam);
                 p.setDate(6, tgl_kembali);
                 p.setString(7, lm_pinjam);
-                p.setString(8, this.NPM);
+                p.setString(8, "0");
+                p.setString(9, kembali);
+                p.setString(10, "0");
+                p.setString(11, this.NPM);
                 p.executeUpdate();
                 p.close();
                 JOptionPane.showMessageDialog(null, "Create Pinjam Successfully");
@@ -423,37 +459,72 @@ public class frmbarang extends javax.swing.JFrame {
             }
         }
         
-        Date tgl2 =new Date();
-        Date date1 = tglkembali.getDate();
+    }//GEN-LAST:event_submitActionPerformed
+    
+    public String hitungselisih(){
+            Date tgl2 =new Date();
+            Date date1 = tglkembali.getDate();
             long selisihMilidetik = date1.getTime() - tgl2.getTime();
             long selisihHari = (selisihMilidetik / (24 * 60 * 60 * 1000)) + 1;
             String selisih = Long.toString(selisihHari);
-            lmpinjam.setText(selisih+" hari");
-            
-        try{
-            st = c.createStatement();
-            rs = st.executeQuery("SELECT * FROM tb_rental WHERE NPM='" + this.NPM + "'");
-            System.out.println(this.NPM);
-            int no = 1;
-            while(rs.next()){
-                String[] row = {Integer.toString(no), rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7)};
-                model.addRow(row);
-                no++;
-            }
-//            tabelStatus.setModel(model);
-        }catch(SQLException ex){
-            System.out.print(ex.getMessage());
-            System.out.println("ada");
-        }
-    }//GEN-LAST:event_submitActionPerformed
+        return selisih;   
+    }
+    
+    public void hitungtelat(){
+        Date tgl2 =new Date();
+        String telats = "";
+        
+            try{            
+                Connection c = koneksi.getkoneksi();
+                st = c.createStatement();
+                rs = st.executeQuery("SELECT tgl_kembali, kembali FROM tb_rental WHERE NPM='" + this.NPM + "'");
 
+                int i =1;
+                while(rs.next()){
+                    String slnpm = this.NPM.substring(8, 11);
+                    String kembali = rs.getString(2);
+                    System.out.println(kembali);
+                    if (kembali.equals("Belum")){
+                        String Id_ren = (slnpm + i);
+                        Date date1 = rs.getDate(1);
+                        System.out.println(date1);
+                        long selisihMilidetik = tgl2.getTime()- date1.getTime();
+                        long selisihHari = (0 -selisihMilidetik / (24 * 60 * 60 * 1000)+1) ;
+                        telats = Long.toString(selisihHari);
+                        System.out.println(telats);
+                        int telat = Integer.parseInt(telats);
+                        System.out.println("telat" + telat);
+
+                        if(telat >= 0){
+                            PreparedStatement tm = c.prepareStatement("UPDATE tb_rental SET telat='" + telat +"' WHERE id_rental ='" + Id_ren + "'");
+                            tm.executeUpdate();
+                            int denda = 0 + telat*5000;
+                            PreparedStatement km = c.prepareStatement("UPDATE tb_rental SET denda='" + denda +"' WHERE id_rental ='" + Id_ren + "'");
+                            km.executeUpdate();
+                            i++;
+                        }
+                        else{
+                            i++;
+                        }   
+                    }else {
+                        i++;
+                    }
+             
+                }
+                
+            }
+            catch(SQLException e){
+                System.out.println("Pangestu halooo");
+                System.out.println(e);
+            }   
+    }
+    
     private void idrentalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idrentalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_idrentalActionPerformed
 
     private void aturulangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aturulangActionPerformed
         // TODO add your handling code here:
-        idrental.setText("");
         merkbarang.setText("");
         tglkembali.setDate(null);
         lmpinjam.setText("");
@@ -475,12 +546,7 @@ public class frmbarang extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        Date tgl2 =new Date();
-        Date date1 = tglkembali.getDate();
-            long selisihMilidetik = date1.getTime() - tgl2.getTime();
-            long selisihHari = (selisihMilidetik / (24 * 60 * 60 * 1000)) + 1;
-            String selisih = Long.toString(selisihHari);
-            lmpinjam.setText(selisih+" hari");
+        lmpinjam.setText(hitungselisih());
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void cmb_barangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_barangActionPerformed
