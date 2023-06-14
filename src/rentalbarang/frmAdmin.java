@@ -256,22 +256,22 @@ public class frmAdmin extends javax.swing.JFrame {
                     String kembali = rs.getString(1); // Masukkan nilai sql pada kolom pertama sesuai dengan statement ke dalam var 'kembali' 
                     System.out.println(kembali); // Menampilkan variabel 'kembali' ke terminal netbeans
 
-                    if(kembali.equals("Belum")){
+                    if(kembali.equals("Belum")){ // bila nilai kembali = belum
                         PreparedStatement km = c.prepareStatement("UPDATE tb_rental SET kembali='Sudah' WHERE id_rental='" + id_ren + "'");
-                        km.executeUpdate();
+                        km.executeUpdate(); //Update nilai kembali menjadi sudah
                     }
-                    rs.close();
+                    rs.close();//menutup database
                     st.close();
                 }
             }
             
             }catch(SQLException e){
-                System.out.println(e);
+                System.out.println(e);// menerima erro bila sql gagal di olah
             }
             finally{
-                this.dispose();
-                frmAdmin a = new frmAdmin();
-                a.setVisible(true);
+                this.dispose(); //menghancurkan jendela frm admin
+                frmAdmin a = new frmAdmin(); //membuat jendela frmadmin yang baru
+                a.setVisible(true);//menampilkan jendelka frmadmin yang baru
             }
     }//GEN-LAST:event_kembaliActionPerformed
 
@@ -285,34 +285,31 @@ public class frmAdmin extends javax.swing.JFrame {
     }//GEN-LAST:event_idrentalKeyTyped
 
     private void lunasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lunasActionPerformed
-                Connection c = koneksi.getkoneksi();
+                Connection c = koneksi.getkoneksi(); //mendapoatkan koneksi
         
         try{
             st = c.createStatement();
-            String id_rental = dendatype.getText().toString().trim();
-            System.out.println(id_rental);
-            rs = st.executeQuery("SELECT id_Rental FROM tb_rental");
-            while(rs.next()){
-                String id_ren = rs.getString(1);
-                System.out.println(id_ren);
-                if(!id_ren.equals(id_rental)){
+            String id_rental = dendatype.getText().toString().trim();//mendapatkan nilai id rental
+            rs = st.executeQuery("SELECT id_Rental FROM tb_rental"); //Menyiapkan querry untuk mengakses sql
+            while(rs.next()){//Mengakses database berdasarkan id rental
+                String id_ren = rs.getString(1); //id rental yang diaskses
+                if(!id_ren.equals(id_rental)){ //periksa apakah id rental yang diakses dan yg di inputkan tidak sama?
                 }
-                else{
+                else{//bila sama maka akses baris tersebut
                     // Membuat objek PreparedStatement untuk query SELECT
                     PreparedStatement km = c.prepareStatement("UPDATE tb_rental SET denda = 0 WHERE id_rental='" + id_ren + "';");
-                    km.executeUpdate();
-                    System.out.println(id_ren);
+                    km.executeUpdate();//eksekusi querry
                     
                 }
             }
             
             }catch(SQLException e){
-                System.out.println(e);
+                System.out.println(e); //menerima errro bila SQL gagal di olah.
             }
             finally{
-                this.dispose();
-                frmAdmin a = new frmAdmin();
-                a.setVisible(true);
+                this.dispose();//Menghancurkan jendela Admin
+                frmAdmin a = new frmAdmin(); //Membuat jendela frmadmin yang baru
+                a.setVisible(true);// menampilkan jendela frmadmin yang baru
             }
     }//GEN-LAST:event_lunasActionPerformed
 
@@ -346,7 +343,7 @@ public class frmAdmin extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmAdmin().setVisible(true);
+                new frmAdmin().setVisible(true);// menampilkan frmadmin
             }
         });
     }
