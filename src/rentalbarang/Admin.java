@@ -4,10 +4,9 @@
  */
 package rentalbarang;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.sql.SQLException;
-import javax.swing.JOptionPane;
+import java.awt.Dimension; //Untuk mendapatkan dimensi lebar atau tinggi suatu komponen dalam int atau double.
+import java.awt.Toolkit; //salah satu fungsinya Untuk mendapatkan ukuran jendela
+import javax.swing.JOptionPane; //Untuk menyediakan jendela dialog.
 
 /**
  *
