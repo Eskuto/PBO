@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Pangestu Siagian
+ * @author Kelompok 8
  */
 public class Admin extends javax.swing.JFrame {
 
@@ -20,10 +20,12 @@ public class Admin extends javax.swing.JFrame {
      */
     public Admin() {
         initComponents();
-                Dimension layar = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = layar.width / 2 - this.getSize().width / 2;
-        int y = layar.height / 2 - this.getSize().height / 2;
-        this.setLocation(x,y);
+        //Berfungsi agar window berada di tengah dengan menggunakan library Dimension 
+        // dan toolkit agar bisa mendapatkan ukuran layar.
+        Dimension layar = Toolkit.getDefaultToolkit().getScreenSize(); 
+        int x = layar.width / 2 - this.getSize().width / 2; //Mendapatkan lebar layar
+        int y = layar.height / 2 - this.getSize().height / 2; //Mendapatkan tinggi layar
+        this.setLocation(x,y); //Meletakan lokasi jendela tepat di tengah layar.
     }
 
     /**
@@ -33,6 +35,8 @@ public class Admin extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    
+    //Pembuatan Component-component desain dari template swing java
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -130,22 +134,22 @@ public class Admin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void masukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masukActionPerformed
-        // TODO add your handling code here:
+        //Fungsi button masuk
         
         try{
-            String password = pass.getText().toString();
-            if(password.equals("admin")){
-                JOptionPane.showMessageDialog(null,"Login Succesfully");
-                this.dispose();
-                frmAdmin a = new frmAdmin();
-                a.setVisible(true);
+            String password = pass.getText().toString(); // Mengubah text menjadi string di text field password.
+            if(password.equals("admin")){ //Password di buat statis dan di simpan di lokal bukan sql.
+                JOptionPane.showMessageDialog(null,"Login Succesfully"); //Menggunkaan JOption library untuk menampilkan dialog pop up.
+                this.dispose(); //Menghancurkan jendela dari kelas Admin.
+                frmAdmin a = new frmAdmin(); //Membuat jendela dari kelas frmAdmin.
+                a.setVisible(true); //Menampilkan jendela dari kelas frmAdmin.
             }
             else{
-                JOptionPane.showMessageDialog(null, "wrong Password");
-                pass.requestFocus();
+                JOptionPane.showMessageDialog(null, "Wrong Password"); //Menampilkan dialog "Wrong Password"
+                pass.requestFocus(); //requestFocus merupakan method agar Listener mendeteksi apapun inputan kita
             }
         }catch (Exception e){
-            System.out.println(" login Error");    
+            System.out.println(" login Error");   //Mencetak string login error bila pengolahan SQL gagal.
         }
     }//GEN-LAST:event_masukActionPerformed
 
@@ -180,7 +184,7 @@ public class Admin extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Admin().setVisible(true);
+                new Admin().setVisible(true); //Menampilkan jendela dari kelas Admin.
             }
         });
     }
