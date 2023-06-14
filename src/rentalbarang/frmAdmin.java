@@ -39,7 +39,7 @@ public class frmAdmin extends javax.swing.JFrame {
         int y = layar.height / 2 - this.getSize().height / 2;
         this.setLocation(x,y);
         
-        String[] header = {"Id Rental", "Barang", "Jumlah", "Merk Barang", "Tgl Pinjam", "Tgl Kembali", "Lama Pinjam", "Kembali", "NPM"};
+        String[] header = {"Id Rental", "Barang", "Jumlah", "Merk Barang", "Tgl Pinjam", "Tgl Kembali", "Lama Pinjam", "Telat", "Kembali", "Denda", "NPM"};
         model = new DefaultTableModel(header,0);
         tabelAdmin.setModel(model);
         
@@ -54,7 +54,9 @@ public class frmAdmin extends javax.swing.JFrame {
             rs = st.executeQuery("SELECT * FROM tb_rental");
             int no = 1;
             while(rs.next()){
-                String[] row = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9)};
+                String[] row = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                                rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), 
+                                rs.getString(11)};
                 model.addRow(row);
                 no++;
             }
@@ -89,38 +91,54 @@ public class frmAdmin extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         kembali = new javax.swing.JButton();
         idrental = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        dendatype = new javax.swing.JTextField();
+        lunas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
 
+        jLabel1.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("STATUS PEMINJAMAN");
 
         tabelAdmin.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         tabelAdmin.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8"
+                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11"
             }
         ));
         tabelAdmin.setGridColor(new java.awt.Color(0, 0, 0));
         tabelAdmin.setShowGrid(true);
         jScrollPane1.setViewportView(tabelAdmin);
 
-        jLabel2.setText("Masukkan id_rental yang telah dikembalikan :");
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("Masukkan id_rental yang telah dikembalikan       :");
 
-        kembali.setText("Kembalikan");
+        kembali.setBackground(new java.awt.Color(255, 255, 255));
+        kembali.setForeground(new java.awt.Color(0, 0, 0));
+        kembali.setText("Dilkembalikan");
         kembali.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 kembaliActionPerformed(evt);
             }
         });
 
+        idrental.setBackground(new java.awt.Color(255, 255, 255));
+        idrental.setForeground(new java.awt.Color(0, 0, 0));
         idrental.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 idrentalActionPerformed(evt);
@@ -132,25 +150,46 @@ public class frmAdmin extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("Masukan id_rental yang telah membayar denda  :");
+
+        dendatype.setBackground(new java.awt.Color(255, 255, 255));
+        dendatype.setForeground(new java.awt.Color(0, 0, 0));
+
+        lunas.setBackground(new java.awt.Color(255, 255, 255));
+        lunas.setForeground(new java.awt.Color(0, 0, 0));
+        lunas.setText("Lunas");
+        lunas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lunasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(271, 271, 271))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(41, 41, 41)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 613, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 689, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(idrental, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(kembali)))
-                .addContainerGap(27, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE))
+                        .addGap(25, 25, 25)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(idrental, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                            .addComponent(dendatype))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(kembali)
+                            .addComponent(lunas, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(41, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(322, 322, 322))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,22 +203,23 @@ public class frmAdmin extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(kembali)
                     .addComponent(idrental, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(dendatype, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lunas))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -235,6 +275,38 @@ public class frmAdmin extends javax.swing.JFrame {
         jumlahchar(evt);
     }//GEN-LAST:event_idrentalKeyTyped
 
+    private void lunasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lunasActionPerformed
+                Connection c = koneksi.getkoneksi();
+        
+        try{
+            st = c.createStatement();
+            String id_rental = dendatype.getText().toString().trim();
+            System.out.println(id_rental);
+            rs = st.executeQuery("SELECT id_Rental FROM tb_rental");
+            while(rs.next()){
+                String id_ren = rs.getString(1);
+                System.out.println(id_ren);
+                if(!id_ren.equals(id_rental)){
+                }
+                else{
+                    // Membuat objek PreparedStatement untuk query SELECT
+                    PreparedStatement km = c.prepareStatement("UPDATE tb_rental SET denda = 0 WHERE id_rental='" + id_ren + "';");
+                    km.executeUpdate();
+                    System.out.println(id_ren);
+                    
+                }
+            }
+            
+            }catch(SQLException e){
+                System.out.println(e);
+            }
+            finally{
+                this.dispose();
+                frmAdmin a = new frmAdmin();
+                a.setVisible(true);
+            }
+    }//GEN-LAST:event_lunasActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -271,12 +343,15 @@ public class frmAdmin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField dendatype;
     private javax.swing.JTextField idrental;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton kembali;
+    private javax.swing.JButton lunas;
     private javax.swing.JTable tabelAdmin;
     // End of variables declaration//GEN-END:variables
 }
