@@ -3,24 +3,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package rentalbarang;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+import java.awt.Dimension; //Untuk mendapatkan dimensi lebar atau tinggi suatu komponen dalam int atau double.
+import java.awt.Toolkit; //Salah satu fungsinya Untuk mendapatkan ukuran jendela.
+import java.awt.event.KeyEvent; //Mampu menerima inputan yang berasal dari KeyBoard
+import java.sql.Connection; //Mengkoneksikan java dengan SQL.
+import java.sql.PreparedStatement; // Prepared statement memungkinkan pengguna untuk mengganti nilai parameter dalam string syntaks SQL dengan ?.
+import java.sql.Statement; // Statement hanya memungkinkan pengguna untuk mengirim syntaks SQL tanpa bisa mengubah nilai parameter.
+import java.sql.ResultSet; // ResultSet memungkinkan Anda untuk mengakses baris-baris data yang dikembalikan oleh query SELECT dan melakukan operasi
+                           //seperti membaca nilai-nilai kolom, memperbarui data, atau melakukan iterasi melalui hasil.
+import java.sql.SQLException; // Untuk menangani kesalahan-kesalahan yang mungkin terjadi saat pengolahan database
+import java.text.ParseException; // Untuk penanganan kesalahan saat parsing (mengubah) representasi string dari objek menjadi bentuk objek yang sesuai dengan tipe data tertentu.
+import javax.swing.JOptionPane; //Untuk menyediakan jendela dialog.
+import javax.swing.table.DefaultTableModel; //menyimpan dan mengelola data tabular dalam bentuk tabel yang dapat ditampilkan dalam komponen seperti JTable. 
 
 /**
  *
- * @author Mul
+ * @author Kelompok 8
  */
 public class frmAdmin extends javax.swing.JFrame {
     
+    //Memmbuat variabel untuk koneksi, NPM, dan tabel
     String NPM;
     public Connection con;
     public Statement st;
@@ -34,44 +36,50 @@ public class frmAdmin extends javax.swing.JFrame {
     public frmAdmin() {
         initComponents();
         
+        // Untuk membuat ukuran jendela berada di tengah dan menyesuaikan ukuran layar laptop pengguna
         Dimension layar = Toolkit.getDefaultToolkit().getScreenSize();
         int x = layar.width / 2 - this.getSize().width / 2;
         int y = layar.height / 2 - this.getSize().height / 2;
         this.setLocation(x,y);
         
+        // Menampilkan tulisan judul tiap kolom tabel
         String[] header = {"Id Rental", "Barang", "Jumlah", "Merk Barang", "Tgl Pinjam", "Tgl Kembali", "Lama Pinjam", "Telat", "Kembali", "Denda", "NPM"};
         model = new DefaultTableModel(header,0);
         tabelAdmin.setModel(model);
         
+        // Menjalankan fungsi tampil
         tampil();
     }
     
+   
     public void tampil(){
-        koneksi classKoneksi = new koneksi();
+        koneksi classKoneksi = new koneksi(); // Membuat objek koneksi yaitu 'classKoneksi'
         try{
-            con = classKoneksi.getkoneksi();
-            st = con.createStatement();
-            rs = st.executeQuery("SELECT * FROM tb_rental");
-            int no = 1;
+            con = classKoneksi.getkoneksi(); // Mendapatkan koneksi SQL
+            st = con.createStatement(); // Menyiapkan statement SQL untuk diisi
+            rs = st.executeQuery("SELECT * FROM tb_rental"); // Menjalankan statement SQL sesuai yang diinginkan
+            
+            int no = 1; // Membuat variabel untuk looping fungsi di bawah ini
             while(rs.next()){
                 String[] row = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
                                 rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), 
-                                rs.getString(11)};
-                model.addRow(row);
-                no++;
+                                rs.getString(11)}; // Mendapatkan nilai dari SQL sesuai dengan letak kolom ke dalam variabel 'row'
+                model.addRow(row); // Menampilkan variabel 'row' dalam bentuk tabel
+                no++; // Melakukan looping
             }
-//            tabelStatus.setModel(model);
-        }catch(SQLException ex){
-            System.out.print(ex.getMessage());
+            
+        }catch(SQLException ex){ // Menangkap error untuk menjalankan perintah di bawah ini
+            System.out.print(ex.getMessage()); 
             System.out.println("ada");
         }
     }
     
-    public void jumlahchar(KeyEvent a){
-        if(idrental.getText().length()==4){
-            a.consume();
+    // Memberikan batas maksimal karakter yang boleh dimasukkan pengguna
+    public void jumlahchar(KeyEvent a){ 
+        if(idrental.getText().length()==4){ // Memberikan batas maksimal 4 karakter 
+            a.consume(); // Menandakan event telah selesai dan tidak perlu diproses lagi
             JOptionPane.showMessageDialog(null, "Masukan 4 Karakter",
-                    "Peringatan",JOptionPane.WARNING_MESSAGE);
+                    "Peringatan",JOptionPane.WARNING_MESSAGE); // Inputan melebihi 4 karakter akan diberi Peringatan: 'Masukkan 4 Karakter'
         }
     }
 
@@ -227,25 +235,26 @@ public class frmAdmin extends javax.swing.JFrame {
 
     private void kembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kembaliActionPerformed
         // TODO add your handling code here:
-        Connection c = koneksi.getkoneksi();
+        Connection c = koneksi.getkoneksi(); // Menyambungkan koneksi dengan SQL
         
         try{
-            st = c.createStatement();
-            String id_rental = idrental.getText().toString().trim();
-            System.out.println(id_rental);
-            rs = st.executeQuery("SELECT id_Rental FROM tb_rental");
-            while(rs.next()){
-                String id_ren = rs.getString(1);
-                System.out.println(id_ren);
-                if(!id_ren.equals(id_rental)){
+            st = c.createStatement(); // Menyiapkan statment SQL
+            String id_rental = idrental.getText().toString().trim(); // Menerima input user melalui ketikkan
+            System.out.println(id_rental); // Menampilkan variabel id_rental di terminal netbeans
+            rs = st.executeQuery("SELECT id_Rental FROM tb_rental"); // Menjalankan statement SQL
+            
+            while(rs.next()){ // Lakukan perulangan setelah melewatkan baris pertama
+                String id_ren = rs.getString(1); // Menerima nilai sql dari kolom pertama yaitu id_rental
+                System.out.println(id_ren);  // Menampilkan variabel id_rental di terminal netbeans
+                if(!id_ren.equals(id_rental)){ // Memastikan bahwa nilai variabel 'id_ren' = 'id_rental'
                 }
                 else{
                     // Membuat objek PreparedStatement untuk query SELECT
-                    PreparedStatement st = c.prepareStatement("SELECT kembali FROM tb_rental WHERE id_rental='" + id_ren + "'");
-                    ResultSet rs = st.executeQuery();
-                    rs.next();
-                    String kembali = rs.getString(1);
-                    System.out.println(kembali);
+                    PreparedStatement st = c.prepareStatement("SELECT kembali FROM tb_rental WHERE id_rental='" + id_ren + "'"); // Memasukkan statement SQL kedalam objek var 'st'
+                    ResultSet rs = st.executeQuery(); // Menjalankan statment di dalam var 'rs'
+                    rs.next(); // Melewatkan satu baris SQL
+                    String kembali = rs.getString(1); // Masukkan nilai sql pada kolom pertama sesuai dengan statement ke dalam var 'kembali' 
+                    System.out.println(kembali); // Menampilkan variabel 'kembali' ke terminal netbeans
 
                     if(kembali.equals("Belum")){
                         PreparedStatement km = c.prepareStatement("UPDATE tb_rental SET kembali='Sudah' WHERE id_rental='" + id_ren + "'");
