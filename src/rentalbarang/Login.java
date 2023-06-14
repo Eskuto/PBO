@@ -11,8 +11,7 @@ import javax.swing.JOptionPane;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 /**
- *
- * @author Pangestu Siagian
+ 
  */
 public class Login extends javax.swing.JFrame {
 
@@ -22,6 +21,8 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        //Berfungsi agar window berada di tengah dengan menggunakan library Dimension 
+        // dan toolkit agar bisa mendapatkan ukuran layar.
         Dimension layar = Toolkit.getDefaultToolkit().getScreenSize();
         int x = layar.width / 2 - this.getSize().width / 2;
         int y = layar.height / 2 - this.getSize().height / 2;
@@ -30,7 +31,8 @@ public class Login extends javax.swing.JFrame {
     
      
     public void kirim(String NPM){
-        npmtype.setText(NPM);
+        //mendapatkan  nilai NPM dari Register
+        npmtype.setText(NPM); // meletakan nilai NPM diatas Text Field
     }
     
     /**
@@ -146,16 +148,25 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
+        // Fungsi Button Login
         try {
+            // Mengkoneksikan fungsi dengan SQL
             Connection c =  koneksi.getkoneksi();
             Statement s = c.createStatement();
+            // Mengubah nilai text menjadi string.
             String NPM = npmtype.getText().toString().trim();
             
+            // Membuat string berisikan syntax SQL.
             String sql = "SELECT * FROM tb_peminjam WHERE NPM='" + npmtype.getText()
                     +"' and Password='"+ passtype.getText() + "'";
             
+            //resultset adalah pengontrol letak kursor terhadap suatu baris didalam database, 
+            //sehingga apa yg kita pilih / select  dari java, akan sesuai dengan data baris yg ada pada database.
             ResultSet r = s.executeQuery(sql);
-            if (r.next()){
+            
+            
+            if (r.next()) //Mengakses setiap baris pada tabel SQL
+            {
                 JOptionPane.showMessageDialog(null,"Login Succesfully");
                 this.dispose();
                 frmbarang a = new frmbarang();
