@@ -3,26 +3,28 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package rentalbarang;
+//Library
+import java.awt.Dimension; //Untuk mendapatkan dimensi lebar atau tinggi suatu komponen dalam int atau double.
+import java.awt.Toolkit; //Salah satu fungsinya Untuk mendapatkan ukuran jendela.
+import java.sql.SQLException; // Untuk menangani kesalahan-kesalahan yang mungkin terjadi saat pengolahan database
+import javax.swing.JOptionPane; //Untuk menyediakan jendela dialog.
+import java.sql.Connection; //Mengkoneksikan java dengan SQL.
+import java.sql.PreparedStatement; // Prepared statement memungkinkan pengguna untuk mengganti nilai parameter dalam string syntaks SQL dengan ?.
+import java.sql.Statement; // Statement hanya memungkinkan pengguna untuk mengirim syntaks SQL tanpa bisa mengubah nilai parameter.
+import java.sql.ResultSet; // ResultSet memungkinkan Anda untuk mengakses baris-baris data yang dikembalikan oleh query SELECT dan melakukan operasi
+                           //seperti membaca nilai-nilai kolom, memperbarui data, atau melakukan iterasi melalui hasil.
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import javax.swing.JOptionPane;
-import javax.swing.SpinnerNumberModel;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
-import javax.swing.table.DefaultTableModel;
+import java.awt.event.KeyEvent;  //Key event untuk membuat trigger yang akan terpicu ketika sebuah tombol di keyboard ditekan.
+import javax.swing.SpinnerNumberModel; //Untuk mengatur swing control JSpinner untuk memilih nilai numerik dalam rentang tertentu..
+import java.util.Date; //Membuat objek Date: Anda dapat membuat objek Date untuk merepresentasikan tanggal dan waktu saat ini.
+import java.text.SimpleDateFormat; //mengubah format tanggal dan waktu menjadi bentuk string, atau sebaliknya.
+import java.text.ParseException; //Digunakan dalam parsing string menjadi angka atau parsing string menjadi tanggal.
+import javax.swing.table.DefaultTableModel; //Digunakan untuk menampilkan dan mengedit data dalam bentuk tabel.
 
 
 /**
  *
- * @author Pangestu Siagian
+ * @author Kelompok 8
  */
 public class frmbarang extends javax.swing.JFrame {
     String NPM;
@@ -38,17 +40,21 @@ public class frmbarang extends javax.swing.JFrame {
     public frmbarang() {
         initComponents();
         
+        //Berfungsi agar window berada di tengah dengan menggunakan library Dimension 
+        // dan toolkit agar bisa mendapatkan ukuran layar.
+        Dimension layar = Toolkit.getDefaultToolkit().getScreenSize(); 
+        int x = layar.width / 2 - this.getSize().width / 2; //Mendaatkan Lebar layar.
+        int y = layar.height / 2 - this.getSize().height / 2; //Mendapatkan tinggi layar.
+        this.setLocation(x,y); //Meletakan lokasi jendela tepat di tengah layar.
         
-        Dimension layar = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = layar.width / 2 - this.getSize().width / 2;
-        int y = layar.height / 2 - this.getSize().height / 2;
-        this.setLocation(x,y);
-        SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel( 0, 0, 10, 1);
+        //Nilai awal=0, Nilai minimum = 0, Nilai maksimum = 10, Jarak setiap naik =1.
+        SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel( 0, 0, 10, 1); 
         jml.setModel(spinnerNumberModel);
         
+        //Memberi Nama pada kolom tabel.
         String[] header = {"Id Rental", "Barang", "Jumlah", "Merk Barang", "Tgl Pinjam", "Tgl Kembali", "Lama Pinjam","Telat", "Kembali", "Denda" };
-        model = new DefaultTableModel(header,0);
-        tabelStatus.setModel(model);
+        model = new DefaultTableModel(header,0);  //Membuat Objek Tabel
+        tabelStatus.setModel(model); //Menampilkan nilai dari objek tabel.
          
         
         
@@ -56,15 +62,16 @@ public class frmbarang extends javax.swing.JFrame {
     
     
     private void autonumber(){
+        //Fungsi untuk membuat ID Rental secara Otomatis.
         try{
-            Connection c = koneksi.getkoneksi();
+            Connection c = koneksi.getkoneksi(); //Menghubungkan Java dengan SQL
             st = c.createStatement();
-            System.out.println(this.NPM);
-            String slnpm = this.NPM.substring(8, 11);
-            int i =1;
-            String Id_ren = (slnpm + i);
-            rs = st.executeQuery("SELECT id_Rental FROM tb_rental");
-            while(rs.next()){
+            String slnpm = this.NPM.substring(8, 11); //Mendapatkan char dari NPM dari indeks 8-11
+            int i =1; 
+            String Id_ren = (slnpm + i); //Menambahkan angka pada akhir substring NPM yang sudah di slice.
+            rs = st.executeQuery("SELECT id_Rental FROM tb_rental"); //Menampilkan nilai dari id_rental dati tabel tb_rental.
+            
+            while(rs.next()){ //Mengakses seluruh baris dari kolom id_rental.
                 String id_ren = rs.getString(1);
                 System.out.println(id_ren);
                 if(!id_ren.equals(Id_ren)){
