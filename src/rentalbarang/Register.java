@@ -187,33 +187,33 @@ public class Register extends javax.swing.JFrame {
 
     private void registerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerActionPerformed
         // TODO add your handling code here:
-        String NPM = npmtype.getText().toString().trim();
-        String Nama = namatype.getText().toString().trim();
-        String Password = passtype.getText().toString().trim();
-        String conPassword = conpasstype.getText().toString().trim();
+        String NPM = npmtype.getText().toString().trim(); //Menerima test dan mengubahnya menjadi nilai string untuk NPM
+        String Nama = namatype.getText().toString().trim(); //Menerima test dan mengubahnya menjadi nilai string untuk Nama
+        String Password = passtype.getText().toString().trim(); //Menerima test dan mengubahnya menjadi nilai string untuk Password
+        String conPassword = conpasstype.getText().toString().trim(); //Menerima test dan mengubahnya menjadi nilai string untuk conPassword
         
-        if (!Password.equals(conPassword)){
-            JOptionPane.showMessageDialog(null, "Password not match");
-        }else if (Password.equals("") || Nama.equals("") || NPM.equals("")){
-            JOptionPane.showMessageDialog(null, "Username or Password cannot be empty");
+        if (!Password.equals(conPassword)){ //memeriksa apakah password = conPassword?
+            JOptionPane.showMessageDialog(null, "Password not match"); //Bila tidak sesuai JOption akan memunculkan dialog  Password not match
+        }else if (Password.equals("") || Nama.equals("") || NPM.equals("")){ //memeriksa apakah ada nilai string yang kosong?
+            JOptionPane.showMessageDialog(null, "Username or Password cannot be empty"); //Bila ada JOption akan menampilkan Username or Password cannot be empty"
         }else{
             try{
-                Connection c = koneksi.getkoneksi();
-                String sql = "INSERT INTO tb_peminjam VALUES (?, ?, ?)";
-                PreparedStatement p = c.prepareStatement(sql);
-                p.setString(1, NPM);
-                p.setString(2, Nama);
-                p.setString(3, Password);
-                p.executeUpdate();
-                p.close();
-                JOptionPane.showMessageDialog(null, "Create Account Successfully");
+                Connection c = koneksi.getkoneksi(); //Mengkoneksikan dengan SQL
+                String sql = "INSERT INTO tb_peminjam VALUES (?, ?, ?)"; //Menyiapkan syntaks SQL untuk mengisi 3 column.
+                PreparedStatement p = c.prepareStatement(sql); //Memasukan syntaks ke SQL
+                p.setString(1, NPM); //Memasukan value NPM
+                p.setString(2, Nama); //Memasukan value Nama
+                p.setString(3, Password); //Memasukan value Password
+                p.executeUpdate(); //Untuk mengupdate tabel SQL
+                p.close(); //Menutup tabel SQL
+                JOptionPane.showMessageDialog(null, "Create Account Successfully"); //Bila berhasil JOption akan mengirimkan dialog "Create Account Successfully"
             }catch(SQLException e){
-                System.out.println(e);
+                System.out.println(e); //Menerima error bila syntaks SQL gagal dijalankan
             }finally{
-                this.dispose();
-                Login a = new Login();
-                a.kirim(NPM);
-                a.setVisible(true);
+                this.dispose(); //Menghancurkan jendela Register
+                Login a = new Login(); // Membuat jendela dari kelas Login
+                a.kirim(NPM); //Mengirim nilai NPM ke Object Login
+                a.setVisible(true); //Menampilkan jendela Login
             }
         }
     }//GEN-LAST:event_registerActionPerformed
@@ -226,6 +226,8 @@ public class Register extends javax.swing.JFrame {
         a.setVisible(true); //Menampilkan jendela Login.
     }//GEN-LAST:event_jButton1ActionPerformed
 
+  
+    //Component -component dari template swing Java.
     /**
      * @param args the command line arguments
      */
@@ -256,7 +258,7 @@ public class Register extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Register().setVisible(true);
+                new Register().setVisible(true);// Menampilkan Jendela Register
             }
         });
     }
