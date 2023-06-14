@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 /**
- 
+ @author Kelompok 8
  */
 public class Login extends javax.swing.JFrame {
 
@@ -24,9 +24,9 @@ public class Login extends javax.swing.JFrame {
         //Berfungsi agar window berada di tengah dengan menggunakan library Dimension 
         // dan toolkit agar bisa mendapatkan ukuran layar.
         Dimension layar = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = layar.width / 2 - this.getSize().width / 2;
-        int y = layar.height / 2 - this.getSize().height / 2;
-        this.setLocation(x,y);
+        int x = layar.width / 2 - this.getSize().width / 2; //Mendaatkan Lebar layar.
+        int y = layar.height / 2 - this.getSize().height / 2; //Mendapatkan tinggi layar.
+        this.setLocation(x,y); //Meletakan lokasi jendela tepat di tengah layar.
     }
     
      
@@ -155,6 +155,7 @@ public class Login extends javax.swing.JFrame {
             // Mengkoneksikan fungsi dengan SQL
             Connection c =  koneksi.getkoneksi();
             Statement s = c.createStatement();
+         
             // Mengubah nilai text menjadi string.
             String NPM = npmtype.getText().toString().trim();
             
@@ -180,7 +181,7 @@ public class Login extends javax.swing.JFrame {
                 passtype.requestFocus(); //requestFocus merupakan method agar Listener mendeteksi apapun inputan kita
             }
         } catch (SQLException e) {
-            System.out.println(" login Error");  //memberi string login error bila pengolahan SQL.
+            System.out.println(" login Error");  //memberi string login error bila pengolahan SQL gagal.
         }
     }//GEN-LAST:event_loginActionPerformed
 
@@ -199,7 +200,6 @@ public class Login extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         //</editor-fold>
-//        protected String NPM = npmtype;
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
