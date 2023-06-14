@@ -494,13 +494,11 @@ public class frmbarang extends javax.swing.JFrame {
                     if (kembali.equals("Belum")){
                         String Id_ren = (slnpm + i);
                         Date date1 = rs.getDate(1);
-                        System.out.println(date1);
                         long selisihMilidetik = tgl2.getTime()- date1.getTime();
                         long selisihHari = (0 -selisihMilidetik / (24 * 60 * 60 * 1000)+1) ;
                         telats = Long.toString(selisihHari);
                         System.out.println(telats);
                         int telat = Integer.parseInt(telats);
-                        System.out.println("telat" + telat);
 
                         if(telat >= 0){
                             PreparedStatement tm = c.prepareStatement("UPDATE tb_rental SET telat='" + telat +"' WHERE id_rental ='" + Id_ren + "'");
@@ -521,7 +519,6 @@ public class frmbarang extends javax.swing.JFrame {
                 
             }
             catch(SQLException e){
-                System.out.println("Pangestu halooo");
                 System.out.println(e);
             }   
     }
